@@ -11,5 +11,6 @@ if __name__ == "__main__":
     db_password = os.getenv("DB_PASSWORD")
     db_name = os.getenv("DB_NAME")
 
+
     crypto_monitor = CryptoMonitor(api_url_base, config_path, db_host, db_user, db_password, db_name)
     crypto_monitor.run()
