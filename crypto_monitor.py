@@ -102,7 +102,7 @@ class CryptoMonitor:
         self.cursor.execute(insert_sql, values)
         self.db_connection.commit()
 
-    def run(self, interval=6.5):
+    def run(self, interval=11.5): #6.5
         while True:
             try:
                 data = self.fetch_crypto_data()
