@@ -36,9 +36,9 @@ class CryptoMonitor:
                 ath DECIMAL(10, 5),
                 ath_change_percentage DECIMAL(10, 5),
                 atl DECIMAL(10, 5),
-                atl_change_percentage DECIMAL(10, 5),
+                atl_change_percentage DECIMAL(12, 6),
                 last_updated TIMESTAMP,
-                symbol TEXT,
+                symbol VARCHAR(255),
                 image TEXT
             );
         '''
@@ -71,6 +71,15 @@ class CryptoMonitor:
 
     def insert_data_into_database(self, coin, details):
         self.create_table_if_not_exists(coin)
+
+        # Überprüfung für atl_change_percentage-Wert
+        atl_change_percentage = details['atl_change_percentage']
+        if atl_change_percentage is not None and isinstance(atl_change_percentage, (int, float)):
+            # Begrenzen Sie die Dezimalstellen auf 6
+            atl_change_percentage = round(atl_change_percentage, 6)
+        else:
+            atl_change_percentage = None
+
         insert_sql = f'''
             INSERT INTO {coin}_data (
                 price_eur, market_cap, volume, high_24h, low_24h, 
@@ -101,7 +110,7 @@ class CryptoMonitor:
                 if data is not None and data != 429:
                     for coin in data:
                         self.insert_data_into_database(coin.get("id"), coin)
-                        print(f"Daten für {coin['name']} erfolgreich in die Datenbank eingefügt.")
+                        #print(f"Daten für {coin['name']} erfolgreich in die Datenbank eingefügt.")
 
                 else:
                     time.sleep(180)
